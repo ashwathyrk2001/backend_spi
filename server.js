@@ -2,15 +2,13 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 const cors = require('cors');
-const port = 5000;
+// const port = 5000;
 const Razorpay = require('razorpay');
 const bodyParser = require('body-parser');
 const { v4: uuidv4 } = require('uuid');
-
 const DeliveryStatus = require('./models/DeliveryStatusModel');
 const Users = require('./models/UserModel')
 const Payment = require('./models/PaymentModel')
-
 const product = require("./controllers/product")
 const productview = require("./controllers/productview")
 const moredetails = require("./controllers/moredetails")
@@ -25,8 +23,6 @@ const price = require("./controllers/price")
 const license = require("./controllers/license")
 const selling = require("./controllers/selling")
 const delivery = require("./controllers/delivery")
-
-
 
 
 app.use(cors());
@@ -75,7 +71,7 @@ app.use("/api/generatelicense",license)
 app.use("/api/delivery",delivery)
 
 
-mongoose.connect('mongodb://localhost:27017/Project')
+mongoose.connect('mongodb+srv://ashwathyrk2001:7n1mOVHcfTv7zAJj@spice-ser.tmjso8o.mongodb.net/?retryWrites=true&w=majority&appName=spice-ser')
   .then(() => {
     console.log('Connected to MongoDB');
   })
@@ -282,9 +278,9 @@ app.post('/login', async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`Server is running on port ${port}`);
+// });
 
 
 
