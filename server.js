@@ -78,7 +78,7 @@ app.use("/api/generatelicense",license)
 app.use("/api/delivery",delivery)
 
 
-mongoose.connect('mongodb://localhost:27017/Project')
+mongoose.connect('mongodb+srv://Philip:philip@cluster0.g9drxmg.mongodb.net/Aromawagon?retryWrites=true&w=majority')
   .then(() => {
     console.log('Connected to MongoDB');
   })
