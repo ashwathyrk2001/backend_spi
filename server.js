@@ -2,13 +2,15 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 const cors = require('cors');
-// const port = 5000;
+const port = 5000;
 const Razorpay = require('razorpay');
 const bodyParser = require('body-parser');
 const { v4: uuidv4 } = require('uuid');
+
 const DeliveryStatus = require('./models/DeliveryStatusModel');
 const Users = require('./models/UserModel')
 const Payment = require('./models/PaymentModel')
+
 const product = require("./controllers/product")
 const productview = require("./controllers/productview")
 const moredetails = require("./controllers/moredetails")
@@ -23,6 +25,9 @@ const price = require("./controllers/price")
 const license = require("./controllers/license")
 const selling = require("./controllers/selling")
 const delivery = require("./controllers/delivery")
+const edit = require("./controllers/edit")
+
+
 
 
 app.use(cors());
@@ -40,6 +45,7 @@ app.use("/api/add-to-cart",addtocart)
 app.use("/api/clear-cart",addtocart)
 app.use("/api/cart",addtocart)
 app.use("/api/remove",addtocart)
+app.use("/api/current",order)
 app.use("/api/shop",table)
 app.use("/api/shopreg",shopreg)
 app.use("/api/ordertable",table)
@@ -48,6 +54,7 @@ app.use("/api/update-price",price)
 app.use("/api/get-price",price)
 app.use("/api/user",price)
 app.use("/api/user",table)
+app.use("/api/edit",edit)
 app.use("/api/dealertable",table)
 app.use("/api/ordertable",table)
 app.use("/api/bookingdetails",table)
@@ -71,7 +78,7 @@ app.use("/api/generatelicense",license)
 app.use("/api/delivery",delivery)
 
 
-mongoose.connect('mongodb+srv://ashwathyrk2001:7n1mOVHcfTv7zAJj@spice-ser.tmjso8o.mongodb.net/?retryWrites=true&w=majority&appName=spice-ser')
+mongoose.connect('mongodb://localhost:27017/Project')
   .then(() => {
     console.log('Connected to MongoDB');
   })
@@ -142,8 +149,25 @@ mongoose.connect('mongodb+srv://ashwathyrk2001:7n1mOVHcfTv7zAJj@spice-ser.tmjso8
     }
   });
   
-   
-
+  app.get('/users/:userId', async (req, res) => {
+    try {
+      const { userId } = req.params;
+  
+      // Fetch user data from the database based on userId
+      const user = await Users.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      // Respond with the user data
+      res.json(user);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  });
+  
 
 // Registration for Customer
 app.post('/register', async (req, res) => {
@@ -278,9 +302,9 @@ app.post('/login', async (req, res) => {
   }
 });
 
-// app.listen(port, () => {
-//   console.log(`Server is running on port ${port}`);
-// });
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
 
 
 
@@ -404,11 +428,9 @@ app.get('/prices', async (req, res) => {
   try {
       const response = await axios.get('https://www.indianspices.com/marketing/price/domestic/daily-price.html');
       const html = response.data;
-      
-      // Load the HTML into cheerio
+
       const $ = cheerio.load(html);
 
-      // Extract cardamom prices
       const cardamomPrices = [];
 $('table tr').each((index, element) => {
     const columns = $(element).find('td');
@@ -425,7 +447,6 @@ $('table tr').each((index, element) => {
         cardamomPrices.push(price);
     }
 });
-
       console.log("Backend cardamom prices:", cardamomPrices); // Log the cardamom prices
       res.json(cardamomPrices);
   } catch (error) {
@@ -434,9 +455,8 @@ $('table tr').each((index, element) => {
   }
 });
 
-
-
 const twilio = require('twilio');
+const { appendXML } = require('pdfkit');
 const otpSchema = new mongoose.Schema({
   otp: String,
   createdAt: { type: Date, default: Date.now },
@@ -445,7 +465,7 @@ const OTP = mongoose.model('OTP', otpSchema);
 
 // Twilio credentials
 const accountSid = 'ACcf936afdc3e3b91c735ed97337dd2886';
-const authToken = 'ad3de4f42f23443384b679d696921a65';
+const authToken = '513948729cc4d27382e660e25a3aead5';
 const twilioPhoneNumber = '+13343674103';
 
 const client = twilio(accountSid, authToken);
@@ -466,7 +486,7 @@ app.post('/generate-otp', async (req, res) => {
     await client.messages.create({
       body: `Your OTP is: ${otp}`,
       from: twilioPhoneNumber,
-      to: phoneNumber
+      to: '+918590864860'
     });
 
     // Save OTP to database

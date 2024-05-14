@@ -14,7 +14,6 @@ router.get('/:orderId', async (req, res) => {
 });
 
 
-
 router.post('/:orderId', async (req, res) => {
   const { orderId } = req.params;
   const { status } = req.body;
@@ -81,35 +80,5 @@ router.post('/update-order-confirmed/:orderId', async (req, res) => {
     }
   });
   
-
   module.exports = router;
-
-//   // twilioService.js
-
-// const twilio = require('twilio');
-
-// const accountSid = 'ACcf936afdc3e3b91c735ed97337dd2886';
-// const authToken = 'ad3de4f42f23443384b679d696921a65';
-// const twilioPhoneNumber = '8943595056';
-
-// const client = twilio(accountSid, authToken);
-
-// const sendSMS = async (to, message) => {
-//   try {
-//     await client.messages.create({
-//       body: message,
-//       from: twilioPhoneNumber,
-//       to: to
-//     });
-//     console.log('SMS sent successfully');
-//     return true; // Return true if SMS sent successfully
-//   } catch (error) {
-//     console.error('Error sending SMS:', error);
-//     return false; // Return false if an error occurred
-//   }
-// };
-
-// module.exports = { sendSMS };
-
-
-// Import necessary modules
+  

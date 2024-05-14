@@ -15,8 +15,7 @@ const priceSchema = new Schema({
   },
   date: {
     type: Date,
-    required: true,
-    unique: true // Ensure uniqueness for the date field
+    required: true
   },
   highestPrice: {
     type: Number,
@@ -27,7 +26,7 @@ const priceSchema = new Schema({
     required: true
   },
   spiceCenterName: {
-    type: String, // Add spice center name field
+    type: String,
     required: true
   },
   address: {
@@ -49,6 +48,7 @@ const priceSchema = new Schema({
     }
   }
 });
+
 
 const Price = mongoose.model('Price', priceSchema);
 

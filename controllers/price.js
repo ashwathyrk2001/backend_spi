@@ -1,5 +1,4 @@
 // routes/updatePrice.js
-
 const express = require('express');
 const router = express.Router();
 const Price = require('../models/PricetoLandModel');
@@ -8,15 +7,8 @@ const Price = require('../models/PricetoLandModel');
 
 router.post('/update-price', async (req, res) => {
   try {
-    const { userId, dealerName, highestPrice, averagePrice, date, spiceCenterName, address } = req.body;
-
-    // Check if a document with the same date already exists for the given user
-    const existingPrice = await Price.findOne({ userId, date });
-
-    if (existingPrice) {
-      // If a document with the same date already exists, return an error
-      return res.status(400).json({ error: 'Data for this date already exists' });
-    }
+    const { userId, dealerName, highestPrice, averagePrice, spiceCenterName, address } = req.body;
+    const date = new Date(); // Generate the current date dynamically
 
     // Create a new price document
     const newPrice = new Price({
@@ -44,15 +36,13 @@ router.post('/update-price', async (req, res) => {
 // Route to fetch prices for a specific date
 router.get('/prices', async (req, res) => {
   try {
-    const { date } = req.query; // Get the date from query parameters
-    const prices = await Price.find({ date }); // Fetch prices for the specified date
+    const prices = await Price.find(); // Fetch all prices
     res.json(prices);
   } catch (error) {
     console.error('Error fetching prices:', error);
     res.status(500).json({ error: 'An error occurred while fetching prices' });
   }
 });
-// routes/updatePrice.js
 
 
 

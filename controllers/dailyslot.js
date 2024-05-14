@@ -23,7 +23,7 @@ router.post('/dailyslot/:shopId', async (req, res) => {
 
       const defaultSlots = [];
 
-      for (let i = 0; i < 7; i++) {
+      for (let i = 1; i < 8; i++) {
         const date = new Date(tomorrow);
         date.setDate(tomorrow.getDate() + i);
 
@@ -55,25 +55,6 @@ router.post('/dailyslot/:shopId', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
-// router.get('/getdailyslot/:shopId', async (req, res) => {
-//   try {
-//     const { shopId } = req.params;
-//     const currentDate = new Date();
-//     const weekStartDate = new Date(currentDate);
-//     weekStartDate.setDate(currentDate.getDate() - currentDate.getDay()); // Start of the current week
-
-//     const existingSlots = await DailySlot.find({
-//       shopId,
-//       date: { $gte: weekStartDate },
-//     });
-
-//     res.json(existingSlots);
-//   } catch (error) {
-//     console.error('Error fetching existing daily slots:', error);
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// });
 
 
 
@@ -124,7 +105,6 @@ router.get('/getdailyslot/:shopId', async (req, res) => {
 
       existingSlots = defaultSlots;
     }
-
     res.json(existingSlots);
   } catch (error) {
     console.error('Error fetching existing daily slots:', error);
@@ -132,4 +112,8 @@ router.get('/getdailyslot/:shopId', async (req, res) => {
   }
 });
 
+
+
+
 module.exports = router;
+
